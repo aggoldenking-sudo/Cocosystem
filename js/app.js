@@ -1,76 +1,40 @@
-/* =========================
-   APP.JS
-   Lógica principal del POS
-   ========================= */
+import { SYSTEM_HOURS, DRAW_TIMES, LOTTERIES, ANIMALS, EXTRA_GAMES, DEFAULTS } from "./data.js";
+import { db } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-import {
-  SYSTEM_HOURS,
-  DRAW_TIMES,
-  LOTTERIES,
-  ANIMALS,
-  DEFAULTS
-} from "./data.js";
-
-/* =========================
-   ESTADO GLOBAL
-   ========================= */
 let selectedLottery = null;
 let selectedDraw = null;
-
-// Estructura:
-// sales[lotteryId][drawHour][animalNumber] = amount
 let sales = {};
 
-/* =========================
-   UTILIDADES DE HORARIO
-   ========================= */
-function getCurrentHour() {
-  return new Date().getHours();
-}
-
+// UTILIDADES
+function getCurrentHour() { return new Date().getHours(); }
 function isSalesAllowed() {
   const h = getCurrentHour();
   return h >= SYSTEM_HOURS.salesStart && h <= SYSTEM_HOURS.drawEnd;
 }
-
 function getAvailableDraws() {
   const h = getCurrentHour();
-
-  // Antes de las 6am → nada
   if (h < SYSTEM_HOURS.salesStart) return [];
-
-  // De 6:00 a 7:59 → solo 8:00 AM
-  if (h < SYSTEM_HOURS.drawStart) {
-    return DRAW_TIMES.filter(d => d.hour24 === SYSTEM_HOURS.drawStart);
-  }
-
-  // De 8:00 AM en adelante → sorteos desde la hora actual
+  if (h < SYSTEM_HOURS.drawStart) return DRAW_TIMES.filter(d => d.hour24 === SYSTEM_HOURS.drawStart);
   return DRAW_TIMES.filter(d => d.hour24 >= h);
 }
 
-/* =========================
-   INICIALIZACIÓN
-   ========================= */
-document.addEventListener("DOMContentLoaded", () => {
+// INICIALIZACIÓN
+export function initApp() {
   if (!isSalesAllowed()) {
     alert("⛔ El sistema está cerrado. Ventas desde las 6:00 AM.");
     return;
   }
-
   renderLotteries();
   renderDraws();
   renderAnimals();
-});
+}
 
-/* =========================
-   LOTERÍAS
-   ========================= */
+// LOTERÍAS
 function renderLotteries() {
   const container = document.getElementById("lotteries");
   if (!container) return;
-
   container.innerHTML = "";
-
   LOTTERIES.filter(l => l.active).forEach(lottery => {
     const btn = document.createElement("button");
     btn.textContent = lottery.name;
@@ -82,32 +46,19 @@ function renderLotteries() {
 
 function selectLottery(lotteryId) {
   selectedLottery = lotteryId;
-
-  if (!sales[selectedLottery]) {
-    sales[selectedLottery] = {};
-  }
-
+  if (!sales[selectedLottery]) sales[selectedLottery] = {};
   selectedDraw = null;
   renderDraws();
   clearAnimalAmounts();
 }
 
-/* =========================
-   SORTEOS
-   ========================= */
+// SORTEOS
 function renderDraws() {
   const container = document.getElementById("draws");
   if (!container) return;
-
   container.innerHTML = "";
-
-  if (!selectedLottery) {
-    container.innerHTML = "<p>Seleccione una lotería</p>";
-    return;
-  }
-
+  if (!selectedLottery) { container.innerHTML = "<p>Seleccione una lotería</p>"; return; }
   const available = getAvailableDraws();
-
   available.forEach(draw => {
     const btn = document.createElement("button");
     btn.textContent = draw.label;
@@ -119,49 +70,52 @@ function renderDraws() {
 
 function selectDraw(hour24) {
   selectedDraw = hour24;
-
-  if (!sales[selectedLottery][selectedDraw]) {
-    sales[selectedLottery][selectedDraw] = {};
-  }
-
+  if (!sales[selectedLottery][selectedDraw]) sales[selectedLottery][selectedDraw] = {};
   loadAnimalAmounts();
 }
 
-/* =========================
-   ANIMALES
-   ========================= */
+// ANIMALES / POLLA HÍPICA
 function renderAnimals() {
   const container = document.getElementById("animals");
   if (!container) return;
-
   container.innerHTML = "";
 
-  ANIMALS.forEach(animal => {
+  let items = [];
+  if (selectedLottery === "polla_hipica") {
+    const game = EXTRA_GAMES.find(g => g.id === "polla_hipica");
+    items = game ? game.horses : [];
+  } else {
+    items = ANIMALS;
+  }
+
+  items.forEach(item => {
     const card = document.createElement("div");
     card.className = "animal-card";
-
     card.innerHTML = `
-      <div class="animal-number">${animal.number}</div>
-      <div class="animal-name">${animal.name}</div>
-      <input 
-        type="number"
-        min="${DEFAULTS.minBet}"
-        placeholder="Monto"
-        data-animal="${animal.number}"
-      />
+      <div class="animal-number">${item.number}</div>
+      <div class="animal-name">${item.name}</div>
+      <input type="number" min="${DEFAULTS.minBet}" placeholder="Monto" data-animal="${item.number}" />
     `;
 
     const input = card.querySelector("input");
     input.addEventListener("input", e => {
-      if (!selectedLottery || !selectedDraw) {
-        e.target.value = "";
-        return;
-      }
-
+      if (!selectedLottery || !selectedDraw) { e.target.value = ""; return; }
       const value = Number(e.target.value);
       if (value < DEFAULTS.minBet) return;
 
-      sales[selectedLottery][selectedDraw][animal.number] = value;
+      if (!sales[selectedLottery][selectedDraw]) sales[selectedLottery][selectedDraw] = {};
+      sales[selectedLottery][selectedDraw][item.number] = value;
+
+      // Guardar en Firebase
+      addDoc(collection(db, "sales"), {
+        lotteryId: selectedLottery,
+        drawHour: selectedDraw,
+        animalNumber: item.number,
+        amount: value,
+        timestamp: serverTimestamp()
+      })
+      .then(() => console.log("✅ Venta guardada en Firebase"))
+      .catch(err => console.error("❌ Error al guardar:", err));
     });
 
     container.appendChild(card);
@@ -169,23 +123,16 @@ function renderAnimals() {
 }
 
 function clearAnimalAmounts() {
-  document
-    .querySelectorAll("#animals input")
-    .forEach(i => (i.value = ""));
+  document.querySelectorAll("#animals input").forEach(i => (i.value = ""));
 }
 
 function loadAnimalAmounts() {
-  document
-    .querySelectorAll("#animals input")
-    .forEach(input => {
-      const animal = input.dataset.animal;
-      const value =
-        sales[selectedLottery]?.[selectedDraw]?.[animal] || "";
-      input.value = value;
-    });
+  document.querySelectorAll("#animals input").forEach(input => {
+    const num = input.dataset.animal;
+    const value = sales[selectedLottery]?.[selectedDraw]?.[num] || "";
+    input.value = value;
+  });
 }
 
-/* =========================
-   DEPURACIÓN (opcional)
-   ========================= */
+// DEPURACIÓN
 window._salesDebug = () => console.log(sales);
