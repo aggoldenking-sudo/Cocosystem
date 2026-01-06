@@ -1,23 +1,19 @@
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+// Login con Firebase
+loginBtn.addEventListener("click", () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
   auth.signInWithEmailAndPassword(email, password)
-    .then(async (cred) => {
-      const uid = cred.user.uid;
-      const userDoc = await db.collection("users").doc(uid).get();
-
-      if (!userDoc.exists) {
-        alert("Usuario sin rol asignado");
-        return;
-      }
-
-      const role = userDoc.data().role;
-
-      if (role === "admin") location.href = "admin.html";
-      else if (role === "collector") location.href = "collector.html";
-      else if (role === "seller") location.href = "seller.html";
-      else alert("Rol no válido");
+    .then((userCredential) => {
+      // Login exitoso
+      loginPanel.style.display = "none";
+      mainContainer.style.display = "block";
+      loginError.style.display = "none";
+      initSistema(); // Inicializa loterías y animales
     })
-    .catch(err => alert(err.message));
-}
+    .catch((error) => {
+      console.error(error);
+      loginError.style.display = "block";
+      loginError.textContent = "Correo o contraseña incorrectos";
+    });
+});
