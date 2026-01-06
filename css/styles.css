@@ -10,9 +10,14 @@ body {
   background: #1e293b;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-  width: 300px;
-  margin: 50px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  width: 350px;
+  margin: 40px auto;
+}
+
+h1, h2 {
+  color: #facc15;
+  text-align: center;
 }
 
 button {
@@ -22,6 +27,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   margin-top: 10px;
+  font-weight: bold;
 }
 
 button:hover {
@@ -33,6 +39,7 @@ button:hover {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+  justify-content: center;
 }
 
 #loterias div, #sorteos div, #animales div, #seleccionados div {
@@ -40,4 +47,22 @@ button:hover {
   padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
+  text-align: center;
+  min-width: 70px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+input[type="number"], input[type="email"], input[type="password"] {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  width: calc(100% - 20px);
+  margin-top: 5px;
 }
