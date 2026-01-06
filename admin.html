@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Cocosystem</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Panel Administrador</h1>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <!-- Configuración de Juegos -->
+    <section id="config-juegos">
+      <h2>Configuración de Juegos</h2>
+      <label>Valor de la Polla:</label>
+      <input type="number" id="valorPolla" min="1">
+      <label>Multiplicador Animalitos:</label>
+      <input type="number" id="multiplicadorAnimalitos" min="1">
+      <label>% del pozo a repartir:</label>
+      <input type="number" id="porcentajePolla" min="1" max="100">
+      <button onclick="guardarSettings()">Guardar Configuración</button>
+    </section>
+
+    <!-- Creación de Recolectores/Vendedores -->
+    <section id="crear-usuarios">
+      <h2>Crear Usuarios</h2>
+      <label>Correo:</label>
+      <input type="email" id="nuevoEmail">
+      <label>Contraseña:</label>
+      <input type="password" id="nuevoPassword">
+      <label>Rol:</label>
+      <select id="nuevoRol">
+        <option value="collector">Recolector</option>
+        <option value="seller">Vendedor</option>
+      </select>
+      <button onclick="crearUsuario()">Crear Usuario</button>
+    </section>
+
+    <!-- Cargar Resultados -->
+    <section id="cargar-resultados">
+      <h2>Cargar Resultados</h2>
+      <label>Juego:</label>
+      <select id="selectJuego">
+        <option value="animalitos">Animalitos</option>
+        <option value="pollaHipica">Polla Hípica</option>
+      </select>
+      <button onclick="cargarResultados()">Cargar Resultados</button>
+    </section>
+  </main>
+
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
