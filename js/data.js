@@ -8,10 +8,10 @@ export const SYSTEM_HOURS = {
   salesStart: 6,   // 6:00 AM se puede vender
   drawStart: 8,    // 8:00 AM primer sorteo
   drawEnd: 19,     // 7:00 PM último sorteo
-  drawInterval: 1 // cada 1 hora
+  drawInterval: 1  // cada 1 hora
 };
 
-// Generar horarios de sorteos (8am a 7pm)
+// Generar horarios de sorteos
 export const DRAW_TIMES = (() => {
   const times = [];
   for (let h = SYSTEM_HOURS.drawStart; h <= SYSTEM_HOURS.drawEnd; h++) {
@@ -29,19 +29,12 @@ export const DRAW_TIMES = (() => {
 
 // Loterías activas
 export const LOTTERIES = [
-  {
-    id: "lotto_activo",
-    name: "Lotto Activo",
-    active: true
-  },
-  {
-    id: "la_granjita",
-    name: "La Granjita",
-    active: true
-  }
+  { id: "lotto_activo", name: "Lotto Activo", active: true },
+  { id: "la_granjita", name: "La Granjita", active: true },
+  { id: "polla_hipica", name: "Polla Hípica", active: true }
 ];
 
-// Animales oficiales (00 al 36 = 37 animales)
+// Animales oficiales (00–36)
 export const ANIMALS = [
   { number: "00", name: "Ballena" },
   { number: "0",  name: "Delfín" },
@@ -83,7 +76,26 @@ export const ANIMALS = [
   { number: "36", name: "Culebra" }
 ];
 
-// Configuración por defecto de venta
+// Polla Hípica
+export const EXTRA_GAMES = [
+  {
+    id: "polla_hipica",
+    name: "Polla Hípica",
+    active: true,
+    horses: [
+      { number: "1", name: "Caballo 1" },
+      { number: "2", name: "Caballo 2" },
+      { number: "3", name: "Caballo 3" },
+      { number: "4", name: "Caballo 4" },
+      { number: "5", name: "Caballo 5" },
+      { number: "6", name: "Caballo 6" },
+      { number: "7", name: "Caballo 7" },
+      { number: "8", name: "Caballo 8" }
+    ]
+  }
+];
+
+// Configuración por defecto
 export const DEFAULTS = {
   currency: "Bs",
   maxBetPerAnimal: 100000,
