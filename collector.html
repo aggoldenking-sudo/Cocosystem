@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recolector | Cocosystem</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Panel Recolector</h1>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <!-- Crear Taquilla -->
+    <section id="crear-taquilla">
+      <h2>Crear Taquilla</h2>
+      <label>Nombre de la Taquilla:</label>
+      <input type="text" id="nombreTaquilla">
+      <button onclick="crearTaquilla()">Crear Taquilla</button>
+      <div id="taquillasList"></div>
+    </section>
+
+    <!-- Registrar Ticket -->
+    <section id="registrar-ticket">
+      <h2>Registrar Ticket</h2>
+      <label>Taquilla:</label>
+      <select id="selectTaquilla"></select>
+      <label>Juego:</label>
+      <select id="selectJuego">
+        <option value="animalitos">Animalitos</option>
+        <option value="pollaHipica">Polla Hípica</option>
+      </select>
+      <button onclick="registrarTicket()">Registrar Ticket</button>
+      <div id="ticketsList"></div>
+    </section>
+  </main>
+
+  <script src="js/firebase.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/collector.js"></script>
+</body>
+</html>
