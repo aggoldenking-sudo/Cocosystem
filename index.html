@@ -1,53 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Cocosystem | Login</title>
-  <link rel="stylesheet" href="css/styles.css">
+<meta charset="UTF-8">
+<title>Cocosystem POS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; color: #000; margin:0; padding:0; }
+  #pos-container { display:none; padding:20px; }
+  .lottery-btn, .draw-btn { margin:5px; padding:8px 12px; cursor:pointer; }
+  .animal-card { border:1px solid #ccc; padding:10px; margin:5px; display:inline-block; width:100px; text-align:center; border-radius:5px; background:#fff; }
+  input { width:80%; margin-top:5px; }
+</style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div id="loginPanel" class="login-box">
-    <h2>Cocosystem</h2>
-    <input id="email" type="email" placeholder="Correo">
-    <input id="password" type="password" placeholder="Contraseña">
-    <button id="loginBtn">Ingresar</button>
-    <p id="loginError" style="color:red; display:none;">Correo o contraseña incorrectos</p>
-  </div>
+<!-- LOGIN -->
+<div id="login-container" style="padding:20px;">
+  <h2>Login Cocosystem</h2>
+  <form id="login-form">
+    <input id="username" type="email" placeholder="Email" required><br><br>
+    <input id="password" type="password" placeholder="Contraseña" required><br><br>
+    <button type="submit">Entrar</button>
+  </form>
+</div>
 
-  <!-- PANEL PRINCIPAL -->
-  <div id="mainContainer" style="display:none;" class="panel">
-    <h1>Bienvenido al Sistema Cocosystem</h1>
-    <button id="logoutBtn">Salir</button>
+<!-- POS -->
+<div id="pos-container">
+  <h2>POS Cocosystem</h2>
+  <h3>Loterías</h3>
+  <div id="lotteries"></div>
 
-    <div class="card">
-      <h2>Loterías</h2>
-      <div id="loterias"></div>
-    </div>
+  <h3>Sorteos</h3>
+  <div id="draws"></div>
 
-    <div class="card">
-      <h2>Sorteos</h2>
-      <div id="sorteos"></div>
-    </div>
+  <h3>Animales / Polla Hípica</h3>
+  <div id="animals"></div>
+</div>
 
-    <div class="card">
-      <h2>Animales</h2>
-      <div id="animales"></div>
-    </div>
+<!-- Scripts -->
+<script type="module" src="./js/firebase.js"></script>
+<script type="module" src="./js/data.js"></script>
+<script type="module" src="./js/app.js"></script>
+<script type="module" src="./js/auth.js"></script>
 
-    <div class="card">
-      <h2>Seleccionados</h2>
-      <div id="seleccionados"></div>
-      <label for="monto">Monto:</label>
-      <input type="number" id="monto" min="0" value="0">
-      <button id="agregarBtn">Agregar</button>
-    </div>
-  </div>
-
-  <!-- Firebase y JS -->
-  <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/auth.js"></script>
-  <script type="module" src="js/app.js"></script>
 </body>
 </html>
