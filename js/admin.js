@@ -1,55 +1,51 @@
-import { settings, loterias, animales, caballos } from "./data.js";
+import { settings, animales, caballos } from "./data.js";
 import { calcularPremioAnimalitos } from "./games/animalitos.js";
 import { calcularPuntosPolla } from "./games/pollaHipica.js";
 
-// Cerrar sesión
-function logout() {
-  auth.signOut().then(() => location.href = "index.html");
-}
-
-// Guardar configuración
-function guardarSettings() {
-  const valorPolla = parseInt(document.getElementById("valorPolla").value);
-  const multiplicador = parseInt(document.getElementById("multiplicadorAnimalitos").value);
-  const porcentaje = parseInt(document.getElementById("porcentajePolla").value);
-
-  db.collection("settings").doc("config").set({
-    valorPolla,
-    multiplicadorAnimalitos: multiplicador,
-    porcentajePremioPolla: porcentaje
-  }).then(() => alert("Configuración guardada!"))
-    .catch(err => alert(err.message));
-}
-
-// Crear usuario (Recolector o Vendedor)
-function crearUsuario() {
-  const email = document.getElementById("nuevoEmail").value;
-  const password = document.getElementById("nuevoPassword").value;
-  const role = document.getElementById("nuevoRol").value;
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(cred => {
-      return db.collection("users").doc(cred.user.uid).set({ role });
-    })
-    .then(() => alert("Usuario creado correctamente!"))
-    .catch(err => alert(err.message));
-}
-
-// Cargar resultados de juegos
-function cargarResultados() {
+// Función para cargar resultados
+async function cargarResultados() {
   const juego = document.getElementById("selectJuego").value;
 
   if (juego === "animalitos") {
-    // Aquí se implementaría la carga de resultados de Animalitos
-    alert("Función carga resultados Animalitos pendiente!");
+    const resultadosAnimalitos = prompt("Ingrese los números ganadores separados por coma (ej: 00,01,02)").split(",");
+    
+    // Guardar resultados en Firebase
+    await db.collection("resultados").doc("animalitos").set({ resultados: resultadosAnimalitos });
+
+    // Actualizar tickets y calcular premios
+    const ticketsSnap = await db.collection("tickets").where("juego", "==", "animalitos").get();
+
+    ticketsSnap.forEach(ticketDoc => {
+      const ticket = ticketDoc.data();
+      const premio = calcularPremioAnimalitos({ apuestas: ticket.apuestas });
+      ticketDoc.ref.update({ premio });
+    });
+
+    alert("Resultados de Animalitos cargados y premios calculados!");
+
   } else if (juego === "pollaHipica") {
-    // Aquí se implementaría la carga de resultados de Polla Hípica
-    alert("Función carga resultados Polla Hípica pendiente!");
+    // Ejemplo de prompt para 8 carreras, cada carrera top3 separados por coma
+    const resultados = [];
+    for (let i = 1; i <= 8; i++) {
+      const top3 = prompt(`Carrera ${i} - Ingrese los 3 primeros caballos separados por coma (ej: Caballo 1,Caballo 2,Caballo 3)`).split(",");
+      resultados.push({ carrera: i, top3 });
+    }
+
+    // Guardar resultados en Firebase
+    await db.collection("resultados").doc("pollaHipica").set({ resultados });
+
+    // Actualizar tickets y calcular puntos
+    const ticketsSnap = await db.collection("tickets").where("juego", "==", "pollaHipica").get();
+
+    ticketsSnap.forEach(ticketDoc => {
+      const ticket = ticketDoc.data();
+      const puntos = calcularPuntosPolla(ticket.apuestas, resultados);
+      ticketDoc.ref.update({ puntos });
+    });
+
+    alert("Resultados de Polla Hípica cargados y puntos calculados!");
   }
 }
 
-// Exponer funciones al HTML
-window.logout = logout;
-window.guardarSettings = guardarSettings;
-window.crearUsuario = crearUsuario;
+// Exponer al HTML
 window.cargarResultados = cargarResultados;
