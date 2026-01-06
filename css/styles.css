@@ -1,68 +1,137 @@
+/* ===== Estilos generales ===== */
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #0f172a;
-  color: #fff;
+  background: #f0f4f8; /* fondo claro */
+  color: #1f2937; /* texto oscuro */
   margin: 0;
   padding: 0;
 }
 
-.login-box, .panel {
-  background: #1e293b;
-  padding: 20px;
+/* ===== Login ===== */
+.login-box {
+  background: #ffffff;
+  padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  width: 350px;
-  margin: 40px auto;
-}
-
-h1, h2 {
-  color: #facc15;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 80px auto;
   text-align: center;
 }
 
-button {
-  background: #facc15;
+.login-box input[type="email"],
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  box-sizing: border-box;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background: #3b82f6; /* azul claro */
+  color: #ffffff;
   border: none;
-  padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
   font-weight: bold;
 }
 
-button:hover {
-  background: #eab308;
+.login-box button:hover {
+  background: #2563eb;
 }
 
-#loterias, #sorteos, #animales, #seleccionados {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  justify-content: center;
+/* ===== Panel principal ===== */
+#mainContainer {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
 }
 
+/* Grid layout para escritorio */
+.panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Cards para loterías, sorteos, animales y seleccionados */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  color: #3b82f6; /* títulos en azul */
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* ===== Elementos internos ===== */
 #loterias div, #sorteos div, #animales div, #seleccionados div {
-  background: #334155;
-  padding: 5px 10px;
+  background: #e2e8f0;
+  padding: 8px 12px;
   border-radius: 6px;
+  margin: 5px;
   cursor: pointer;
   text-align: center;
-  min-width: 70px;
+  transition: transform 0.2s, background 0.2s;
 }
 
-.card {
-  background: #1e293b;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+#loterias div:hover, #sorteos div:hover, #animales div:hover, #seleccionados div:hover {
+  background: #cbd5e1;
+  transform: scale(1.05);
 }
 
 input[type="number"], input[type="email"], input[type="password"] {
+  width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: none;
-  width: calc(100% - 20px);
-  margin-top: 5px;
+  border: 1px solid #cbd5e1;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
+
+button {
+  background: #3b82f6;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  color: #ffffff;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+/* Logout */
+#logoutBtn {
+  width: auto;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  background: #ef4444;
+}
+
+#logoutBtn:hover {
+  background: #dc2626;
+}
+
+/* ===== Responsive Móvil ===== */
+@media (max-width: 768px) {
+  .panel {
+    grid-template-columns: 1fr;
+  }
+
+  .login-box {
+    margin: 50px 20px;
+    width: auto;
+  }
+}
+
