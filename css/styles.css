@@ -1,137 +1,31 @@
-/* ===== Estilos generales ===== */
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #f0f4f8; /* fondo claro */
-  color: #1f2937; /* texto oscuro */
-  margin: 0;
-  padding: 0;
-}
+/* Reset básico */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
 
-/* ===== Login ===== */
-.login-box {
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 400px;
-  margin: 80px auto;
-  text-align: center;
-}
+/* Contenedor general */
+.container { max-width: 1200px; margin: auto; padding: 20px; }
 
-.login-box input[type="email"],
-.login-box input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #cbd5e1;
-  box-sizing: border-box;
-}
+/* LOGIN */
+.login-box { max-width: 400px; margin: 80px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center; }
+.login-box h2 { margin-bottom: 20px; color: #333; }
+.login-box input { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+.login-box button { width: 95%; padding: 12px; border:none; border-radius:5px; background:#4CAF50; color:#fff; font-size:16px; cursor:pointer; transition:0.3s; }
+.login-box button:hover { background:#45a049; }
 
-.login-box button {
-  width: 100%;
-  padding: 10px;
-  background: #3b82f6; /* azul claro */
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
+/* POS */
+.section { margin-bottom: 30px; }
+.buttons-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.lottery-btn, .draw-btn { padding: 10px 15px; border:none; border-radius:5px; cursor:pointer; background:#2196F3; color:#fff; transition:0.3s; }
+.lottery-btn:hover, .draw-btn:hover { background:#1976D2; }
 
-.login-box button:hover {
-  background: #2563eb;
-}
+/* Animales / Polla Hípica */
+.animals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); gap:10px; }
+.animal-card { padding:10px; border-radius:8px; border:1px solid #ccc; background:#fff; text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.animal-card .animal-number { font-weight:bold; font-size:16px; margin-bottom:5px; }
+.animal-card .animal-name { font-size:14px; margin-bottom:5px; }
+.animal-card input { width:80%; padding:5px; border:1px solid #ccc; border-radius:5px; }
 
-/* ===== Panel principal ===== */
-#mainContainer {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-/* Grid layout para escritorio */
-.panel {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-/* Cards para loterías, sorteos, animales y seleccionados */
-.card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.card h2 {
-  color: #3b82f6; /* títulos en azul */
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-/* ===== Elementos internos ===== */
-#loterias div, #sorteos div, #animales div, #seleccionados div {
-  background: #e2e8f0;
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin: 5px;
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.2s, background 0.2s;
-}
-
-#loterias div:hover, #sorteos div:hover, #animales div:hover, #seleccionados div:hover {
-  background: #cbd5e1;
-  transform: scale(1.05);
-}
-
-input[type="number"], input[type="email"], input[type="password"] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #cbd5e1;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
-
-button {
-  background: #3b82f6;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  width: 100%;
-  color: #ffffff;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
-/* Logout */
-#logoutBtn {
-  width: auto;
-  padding: 8px 16px;
-  margin-bottom: 20px;
-  background: #ef4444;
-}
-
-#logoutBtn:hover {
-  background: #dc2626;
-}
-
-/* ===== Responsive Móvil ===== */
+/* Responsive */
 @media (max-width: 768px) {
-  .panel {
-    grid-template-columns: 1fr;
-  }
-
-  .login-box {
-    margin: 50px 20px;
-    width: auto;
-  }
+  .animals-grid { grid-template-columns: repeat(auto-fill, minmax(80px,1fr)); }
+  .login-box { margin:50px 20px; padding:20px; }
 }
-
